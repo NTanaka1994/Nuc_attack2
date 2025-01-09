@@ -35,7 +35,7 @@
     <form method="GET" action="bomb">
       <table>
         <tr><td colspan="3">爆心地情報</td></tr>
-        <tr><td>緯度</td><td><input type="text" name="ido" value="{{ ido | safe }}" id="ido" required="required" readonly></td><td rowspan="4"></td></tr>
+        <tr><td>緯度</td><td><input type="text" name="ido" value="{{ ido | safe }}" id="ido" required="required" readonly></td><td rowspan="4"><input type="button" onclick="del()" value="消去"></td></tr>
         <tr><td>経度</td><td><input type="text" name="kei" value="{{ kei | safe }}" id="kei" required="required" readonly></td></tr>
         <tr><td>種類</td><td>
           <select name="bomb">
@@ -162,14 +162,19 @@
           L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
           attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
         }).addTo(map);
-        var geojsonData = {{ geojson_data | safe }};
-
-        // 複数のGeoJSONデータを地図に追加
-        geojsonData.forEach(function(data) {
-            L.geoJSON(data).addTo(map);
-      });
       }  
     </script> 
+    <script>
+      function del(){
+        document.getElementById("ido").value = "";
+        document.getElementById("kei").value = "";
+      }
+      function del2(){
+        document.getElementById("sido").value = "";
+        document.getElementById("skei").value = "";
+      }
+    </script>
+    
     <div id="mapcontainer" style="width:1200px;height:800px"></div>
 
   </body>
