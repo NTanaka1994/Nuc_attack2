@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Population and Circular Search Area</title>
+    <!-- LeafletのCSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Population and Circular Search Area</h1>
+    <div id="map"></div>
+
+    <!-- LeafletのJavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 地図の初期設定
+        var map = L.map('map').setView([35.693124, 139.728893], 13); // 新宿周辺の中心
+
+        // OpenStreetMapのタイルを追加
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Flaskからデータを取得
+        $.getJSON('/map_data', function(data) {
+            // 円を描画
+            var circle = L.circle([data.circle_center[1], data.circle_center[0]], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.3,
+                radius: data.circle_radius
+            }).addTo(map);
+
+            // 円内のポリゴンを表示
+            data.population_data.forEach(function(item) {
+                // ここでは単純にポリゴンを円内の点として表示
+                var polygon = L.circle([data.circle_center[1], data.circle_center[0]], {
+                    radius: 20,
+                    color: 'blue',
+                    fillOpacity: 0.6
+                }).addTo(map);
+                
+                polygon.bindPopup('Population: ' + item.population);
+            });
+        });
+    </script>
+</body>
+</html>
