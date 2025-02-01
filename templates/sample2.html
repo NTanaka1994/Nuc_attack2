@@ -162,6 +162,12 @@
           L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
           attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
         }).addTo(map);
+        var geojsonData = {{ geojson_data | safe }};
+
+        // 複数のGeoJSONデータを地図に追加
+        geojsonData.forEach(function(data) {
+            L.geoJSON(data).addTo(map);
+      });
       }  
     </script> 
     <script>
